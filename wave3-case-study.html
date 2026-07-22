@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wave3 Collective PH — Custom Business Platform | Case Study</title>
+<meta name="description" content="A complete custom e-commerce and business management platform built from scratch — storefront, custom CMS, real-time inventory, and payment verification. No Shopify. No WordPress. No templates." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  :root {
+    --black: #050506;
+    --black-2: #0a0a0d;
+    --panel: #0e0e13;
+    --white: #f5f5f8;
+    --muted: #9b9ba8;
+    --muted-2: #62626e;
+    --royal: #0014f7;
+    --royal-soft: #3d5bff;
+    --royal-glow: rgba(0, 20, 247, 0.35);
+    --line: rgba(255, 255, 255, 0.08);
+    --glass: rgba(255, 255, 255, 0.035);
+    --font: 'Epilogue', system-ui, sans-serif;
+    --mono: 'Space Grotesk', monospace;
+    --max: 1140px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--royal); color: #fff; }
+  a { color: var(--royal-soft); text-decoration: none; }
+  a:hover { color: #7a8dff; }
+
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+  section { padding: clamp(72px, 10vw, 130px) 0; position: relative; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--royal-soft);
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 22px;
+  }
+  .eyebrow::before { content: ''; width: 34px; height: 1px; background: var(--royal-soft); }
+
+  h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.06; }
+  h2 { font-size: clamp(32px, 5vw, 56px); margin-bottom: 22px; }
+  h3 { font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
+  .lede { color: var(--muted); font-size: clamp(17px, 2vw, 20px); max-width: 640px; }
+
+  /* ---------- reveal on scroll (hidden state only when JS is running) ---------- */
+  .rv { transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1); }
+  html.js .rv { opacity: 0; transform: translateY(28px); }
+  html.js .rv.in { opacity: 1; transform: none; }
+  .rv-d1 { transition-delay: .08s; } .rv-d2 { transition-delay: .16s; } .rv-d3 { transition-delay: .24s; }
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    min-height: 92vh; display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 120px 0 90px;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 50% 60% at 80% 15%, var(--royal-glow), transparent 65%),
+      radial-gradient(ellipse 40% 40% at 10% 90%, rgba(0,20,247,0.15), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    color: var(--muted); border: 1px solid var(--line);
+    padding: 8px 18px; border-radius: 999px; margin-bottom: 34px;
+    background: var(--glass); backdrop-filter: blur(8px);
+  }
+  .hero-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 10px rgba(46,204,113,.8); }
+  .hero h1 {
+    font-size: clamp(44px, 8vw, 104px);
+    font-weight: 900;
+    max-width: 12ch;
+  }
+  .hero h1 .blue { color: transparent; -webkit-text-stroke: 1.5px var(--royal-soft); }
+  .hero .sub { margin-top: 30px; font-size: clamp(17px, 2.2vw, 21px); color: var(--muted); max-width: 560px; }
+  .hero .sub strong { color: var(--white); font-weight: 700; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 34px; margin-top: 54px; }
+  .hero-meta div { border-left: 2px solid var(--royal); padding-left: 16px; }
+  .hero-meta .k { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted-2); }
+  .hero-meta .v { font-weight: 700; font-size: 15.5px; margin-top: 2px; }
+
+  /* ---------- marquee strip ---------- */
+  .strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 18px 0; overflow: hidden; background: var(--black-2); }
+  .strip-track { display: flex; gap: 56px; white-space: nowrap; width: max-content; animation: slide 38s linear infinite; font-family: var(--mono); font-size: 13px; letter-spacing: .26em; text-transform: uppercase; color: var(--muted-2); }
+  .strip-track .sep { color: var(--royal-soft); }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .strip-track { animation: none; } }
+
+  /* ---------- glass cards ---------- */
+  .cards { display: grid; gap: 16px; }
+  .cards.c2 { grid-template-columns: repeat(2, 1fr); }
+  .cards.c3 { grid-template-columns: repeat(3, 1fr); }
+  .cards.c4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 900px) { .cards.c3, .cards.c4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) { .cards.c2, .cards.c3, .cards.c4 { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 30px 28px;
+    backdrop-filter: blur(10px);
+    transition: border-color .3s, transform .3s;
+  }
+  .card:hover { border-color: rgba(61, 91, 255, 0.45); transform: translateY(-3px); }
+  .card h3 { margin-bottom: 10px; }
+  .card p { color: var(--muted); font-size: 15px; }
+  .card .num { font-family: var(--mono); font-size: 13px; color: var(--royal-soft); font-weight: 600; letter-spacing: .1em; display: block; margin-bottom: 16px; }
+
+  /* ---------- stat band ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 780px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat { text-align: center; padding: 36px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--glass); }
+  .stat .n { font-size: clamp(34px, 4.5vw, 52px); font-weight: 900; letter-spacing: -0.03em; }
+  .stat .n em { font-style: normal; color: var(--royal-soft); }
+  .stat .t { font-family: var(--mono); font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted-2); margin-top: 8px; }
+
+  /* ---------- feature chips ---------- */
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+  .chip {
+    font-size: 13.5px; font-weight: 600; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px;
+    background: var(--glass); transition: color .25s, border-color .25s;
+  }
+  .chip:hover { color: var(--white); border-color: var(--royal-soft); }
+
+  /* ---------- split layout ---------- */
+  .split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 70px); align-items: start; }
+  @media (max-width: 880px) { .split { grid-template-columns: 1fr; } }
+  .split .sticky { position: sticky; top: 100px; }
+  @media (max-width: 880px) { .split .sticky { position: static; } }
+
+  /* ---------- screenshot frames ---------- */
+  .shot {
+    position: relative; border-radius: 18px; overflow: hidden;
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, rgba(0,20,247,0.10), rgba(255,255,255,0.02) 55%),
+      var(--panel);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 200px;
+  }
+  .shot.wide { aspect-ratio: 16 / 9; }
+  .shot.tall { aspect-ratio: 9 / 16; min-height: 0; }
+  .shot.square { aspect-ratio: 16 / 10; }
+  .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+  .shot .ph-label {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    color: var(--muted-2); font-family: var(--mono); font-size: 12.5px;
+    letter-spacing: .22em; text-transform: uppercase; text-align: center; padding: 20px;
+  }
+  .shot .ph-label::before {
+    content: ''; width: 44px; height: 44px; border-radius: 12px;
+    border: 1.5px dashed rgba(61,91,255,.5);
+    background: rgba(0,20,247,.08);
+  }
+  .shot-cap { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-2); margin-top: 12px; }
+  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  @media (max-width: 720px) { .gallery { grid-template-columns: 1fr; } }
+  .gallery .full { grid-column: 1 / -1; }
+  .mobile-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 720px; }
+  @media (max-width: 620px) { .mobile-row { grid-template-columns: 1fr; max-width: 240px; } }
+
+  /* ---------- timeline ---------- */
+  .timeline { position: relative; max-width: 640px; margin-top: 30px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 11px; top: 6px; bottom: 6px;
+    width: 2px; background: var(--line);
+  }
+  .timeline .progress {
+    position: absolute; left: 11px; top: 6px; width: 2px; height: 0;
+    background: linear-gradient(180deg, var(--royal-soft), var(--royal));
+    box-shadow: 0 0 12px var(--royal-glow);
+    transition: height .25s linear;
+  }
+  .tl-step { position: relative; padding: 0 0 34px 52px; }
+  .tl-step:last-child { padding-bottom: 0; }
+  .tl-step .dot {
+    position: absolute; left: 3px; top: 5px; width: 18px; height: 18px;
+    border-radius: 50%; border: 2px solid var(--muted-2); background: var(--black);
+    transition: border-color .4s, box-shadow .4s;
+  }
+  .tl-step.lit .dot { border-color: var(--royal-soft); box-shadow: 0 0 14px var(--royal-glow); }
+  .tl-step h3 { font-size: 18px; }
+  .tl-step p { color: var(--muted); font-size: 14.5px; margin-top: 4px; }
+
+  /* ---------- deliverables ---------- */
+  .deliver { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  @media (max-width: 640px) { .deliver { grid-template-columns: 1fr; } }
+  .deliver div {
+    padding: 20px 26px; font-weight: 600; font-size: 15.5px;
+    border-bottom: 1px solid var(--line); background: var(--glass);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .deliver div::before { content: '✔'; color: var(--royal-soft); font-size: 14px; }
+  .deliver div:nth-child(odd) { border-right: 1px solid var(--line); }
+  @media (max-width: 640px) { .deliver div:nth-child(odd) { border-right: none; } }
+
+  /* ---------- impact table ---------- */
+  .impact { display: flex; flex-direction: column; gap: 14px; }
+  .impact-row {
+    display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: 20px; padding: 26px 28px; align-items: center;
+    border: 1px solid var(--line); border-radius: 16px; background: var(--glass);
+  }
+  @media (max-width: 700px) { .impact-row { grid-template-columns: 1fr; gap: 8px; } }
+  .impact-row .f { font-weight: 800; font-size: 17px; }
+  .impact-row .f span { color: var(--royal-soft); font-family: var(--mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .impact-row .w { color: var(--muted); font-size: 15px; }
+
+  /* ---------- code-ish detail rows ---------- */
+  .eng { border-left: 2px solid var(--royal); padding: 4px 0 4px 24px; margin-bottom: 30px; }
+  .eng h3 { margin-bottom: 6px; }
+  .eng p { color: var(--muted); font-size: 15.5px; max-width: 720px; }
+  .eng .tag { font-family: var(--mono); font-size: 11.5px; color: var(--royal-soft); letter-spacing: .18em; text-transform: uppercase; }
+
+  /* ---------- footer ---------- */
+  footer { border-top: 1px solid var(--line); padding: 80px 0 70px; background: var(--black-2); }
+  .cta h2 { font-size: clamp(30px, 5vw, 52px); }
+  .cta p { color: var(--muted); margin-top: 14px; max-width: 520px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--royal); color: #fff; font-weight: 700; font-size: 16px;
+    padding: 16px 34px; border-radius: 12px; margin-top: 34px;
+    transition: box-shadow .3s, transform .3s;
+  }
+  .btn:hover { color: #fff; box-shadow: 0 10px 40px var(--royal-glow); transform: translateY(-2px); }
+
+  .divider-num {
+    font-family: var(--mono); font-size: 13px; color: var(--muted-2); letter-spacing: .2em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-tag rv"><span class="dot"></span> Live in production — wave3collectiveph.com</div>
+    <h1 class="rv rv-d1">Wave3 Collective<span class="blue">PH</span></h1>
+    <p class="sub rv rv-d2">
+      A complete <strong>custom business platform</strong> for a Philippine streetwear brand —
+      premium storefront, fully custom CMS, real-time inventory, and payment operations.
+      <strong>No Shopify. No WordPress. No templates.</strong> Built from scratch, end to end, by one engineer.
+    </p>
+    <div class="hero-meta rv rv-d3">
+      <div><div class="k">Role</div><div class="v">Full Stack Engineer — everything</div></div>
+      <div><div class="k">Type</div><div class="v">Custom E-commerce + CMS</div></div>
+      <div><div class="k">Status</div><div class="v">V2 live · V1 sold out</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- tech strip -->
+<div class="strip" aria-hidden="true">
+  <div class="strip-track">
+    <span>Node.js</span><span class="sep">◆</span><span>Vanilla JavaScript</span><span class="sep">◆</span><span>Turso — Distributed SQLite</span><span class="sep">◆</span><span>Render</span><span class="sep">◆</span><span>Custom CMS</span><span class="sep">◆</span><span>REST API</span><span class="sep">◆</span><span>GoDaddy DNS</span><span class="sep">◆</span><span>Responsive Design</span><span class="sep">◆</span>
+    <span>Node.js</span><span class="sep">◆</span><span>Vanilla JavaScript</span><span class="sep">◆</span><span>Turso — Distributed SQLite</span><span class="sep">◆</span><span>Render</span><span class="sep">◆</span><span>Custom CMS</span><span class="sep">◆</span><span>REST API</span><span class="sep">◆</span><span>GoDaddy DNS</span><span class="sep">◆</span><span>Responsive Design</span><span class="sep">◆</span>
+  </div>
+</div>
+
+<!-- ================= OVERVIEW ================= -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow rv">01 — Overview</p>
+    <h2 class="rv">Not a website.<br />An operating system for a brand.</h2>
+    <p class="lede rv rv-d1">
+      Wave3 Collective PH wanted a premium streetwear experience — not another generic template store.
+      The goal was never just selling shirts: it was a platform that tells the brand's story
+      while giving the owner <strong style="color:var(--white)">complete business control without touching code</strong>.
+      Version 1 sold out its first batch. This case study covers Version 2.
+    </p>
+
+    <div class="stats" style="margin-top:64px;">
+      <div class="stat rv"><div class="n">100<em>%</em></div><div class="t">Custom code — zero templates</div></div>
+      <div class="stat rv rv-d1"><div class="n">1</div><div class="t">Engineer, end to end</div></div>
+      <div class="stat rv rv-d2"><div class="n">Sold<em> out</em></div><div class="t">First production drop</div></div>
+      <div class="stat rv rv-d3"><div class="n">0</div><div class="t">Developer needed to operate it</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BUSINESS IMPACT ================= -->
+<section style="background:var(--black-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <p class="eyebrow rv">02 — Business Impact</p>
+    <h2 class="rv">Features are cheap.<br />Here's why these matter.</h2>
+    <div class="impact" style="margin-top:48px;">
+      <div class="impact-row rv">
+        <div class="f"><span>Custom CMS</span>Total independence</div>
+        <div class="w">The client manages products, pricing, inventory, images, and every page of content herself — no developer involvement, no monthly platform fees, no waiting on anyone.</div>
+      </div>
+      <div class="impact-row rv">
+        <div class="f"><span>Real-time inventory</span>No overselling</div>
+        <div class="w">Stock is reserved the instant an order is placed and released automatically if payment lapses. Race conditions are handled at the database-transaction level — two customers can't buy the last shirt.</div>
+      </div>
+      <div class="impact-row rv">
+        <div class="f"><span>Manual payment workflow</span>Launch before the paperwork</div>
+        <div class="w">Receipt-upload verification let the business start selling before having a registered business account — with a clear, designed-in path to automated payment gateways later. The business launched months earlier because of this decision.</div>
+      </div>
+      <div class="impact-row rv">
+        <div class="f"><span>Docs + video + live training</span>Confident handover</div>
+        <div class="w">A PDF operations manual, Loom walkthroughs, and a live training session meant the owner operated the platform independently from day one — support requests dropped to near zero.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHAT I BUILT (customer) ================= -->
+<section>
+  <div class="wrap">
+    <div class="split">
+      <div class="sticky">
+        <p class="eyebrow rv">03 — The Storefront</p>
+        <h2 class="rv">A premium buying experience</h2>
+        <p class="lede rv rv-d1">
+          Every pixel custom-built to the brand: an editorial homepage, a real multi-item cart,
+          live currency conversion, and an order flow designed around how Filipino customers actually pay.
+        </p>
+      </div>
+      <div>
+        <div class="chips rv">
+          <span class="chip">Premium custom homepage</span>
+          <span class="chip">Product catalog + detail pages</span>
+          <span class="chip">Multi-item shopping cart</span>
+          <span class="chip">Checkout with order confirmation</span>
+          <span class="chip">Payment receipt upload</span>
+          <span class="chip">Order tracking by code</span>
+          <span class="chip">Live inventory per size</span>
+          <span class="chip">Stock reservation + payment countdown</span>
+          <span class="chip">Multi-currency display (PHP / USD / USDT)</span>
+          <span class="chip">Live FX conversion</span>
+          <span class="chip">Per-order shipping fees</span>
+          <span class="chip">Brand story blog</span>
+          <span class="chip">Interactive photo storytelling</span>
+          <span class="chip">Community &amp; contact channels</span>
+          <span class="chip">Product search</span>
+          <span class="chip">Fully responsive</span>
+        </div>
+        <div class="cards c2" style="margin-top:34px;">
+          <div class="card rv">
+            <span class="num">FLOW</span>
+            <h3>Shopee-style reservations</h3>
+            <p>Stock reserves at order time, a payment window counts down, and unpaid orders auto-expire and restock — matching the buying behavior customers already know from major PH marketplaces.</p>
+          </div>
+          <div class="card rv rv-d1">
+            <span class="num">TRUST</span>
+            <h3>Verified receipts</h3>
+            <p>Customers upload proof of payment; the owner verifies and approves in one click. Every paid order generates a shareable receipt page with courier tracking.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CMS ================= -->
+<section style="background:var(--black-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <p class="eyebrow rv">04 — The Custom CMS</p>
+    <h2 class="rv">This is not WordPress.</h2>
+    <p class="lede rv rv-d1">
+      A fully custom content-and-operations system, purpose-built for this business.
+      Every screen below was designed and coded from zero — the owner runs the entire company
+      through it without ever seeing a line of code.
+    </p>
+
+    <div class="cards c3" style="margin-top:56px;">
+      <div class="card rv"><span class="num">01</span><h3>Dashboard</h3><p>Orders to verify, pending payments, stock remaining, income, expenses, and net profit — the whole business at a glance.</p></div>
+      <div class="card rv rv-d1"><span class="num">02</span><h3>Product management</h3><p>Add, edit, hide, or permanently delete products. Upload photos, set prices, manage sizes and measurements — live on the store instantly.</p></div>
+      <div class="card rv rv-d2"><span class="num">03</span><h3>Inventory control</h3><p>Per-size stock counts with low-stock alerts. Reservations and releases happen automatically as orders move through their lifecycle.</p></div>
+      <div class="card rv"><span class="num">04</span><h3>Order operations</h3><p>Verify payments, set shipping fees, add tracking numbers, cancel or reverse orders — with stock and bookkeeping corrected automatically at every step.</p></div>
+      <div class="card rv rv-d1"><span class="num">05</span><h3>Money &amp; reporting</h3><p>Automatic income and shipping-expense logging on every sale, date-range reports, and one-click Excel/CSV exports.</p></div>
+      <div class="card rv rv-d2"><span class="num">06</span><h3>Content studio</h3><p>Rich-text blog editor (fonts, colors, links, images), hero image upload, featured-product curation, homepage photo stories, payment channels with QR codes, contact links, and password management.</p></div>
+    </div>
+
+    <div class="gallery" style="margin-top:60px;">
+      <div class="full">
+        <div class="shot wide rv"><img src="admin-dashboard.jpg?v=2" alt="Wave3 admin dashboard — orders, stock, income, expenses and profit at a glance" loading="lazy" /></div>
+        <div class="shot-cap">The command center — orders, stock, and money in one view</div>
+      </div>
+      <div>
+        <div class="shot square rv"><img src="Product.jpg" alt="Product management — creating a new product from the CMS" loading="lazy" /></div>
+        <div class="shot-cap">Products, sizes &amp; photos</div>
+      </div>
+      <div>
+        <div class="shot square rv rv-d1"><img src="inventory.jpg" alt="Inventory management with per-size stock control" loading="lazy" /></div>
+        <div class="shot-cap">Per-size stock control</div>
+      </div>
+      <div>
+        <div class="shot square rv"><img src="Payment-Verification.jpg?v=2" alt="Order management with payment receipt verification" loading="lazy" /></div>
+        <div class="shot-cap">Payment verification flow</div>
+      </div>
+      <div>
+        <div class="shot square rv rv-d1"><img src="Settings.jpg" alt="CMS settings — content editing without code" loading="lazy" /></div>
+        <div class="shot-cap">Content without code</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BUSINESS LOGIC / ENGINEERING ================= -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow rv">05 — Under the Hood</p>
+    <h2 class="rv">The engineering that makes it a platform</h2>
+    <p class="lede rv rv-d1" style="margin-bottom:56px;">Decisions a template can't make for you.</p>
+
+    <div class="eng rv">
+      <span class="tag">Concurrency</span>
+      <h3>Race-condition-safe inventory</h3>
+      <p>Stock decrements run inside database transactions at reservation time. Verified by simulating two simultaneous buyers competing for the last unit — exactly one wins, every time. When an admin updates stock, customers see it immediately.</p>
+    </div>
+    <div class="eng rv">
+      <span class="tag">Architecture</span>
+      <h3>Built for ephemeral infrastructure</h3>
+      <p>All media — payment receipts, QR codes, product photos, blog images — is stored in the database rather than on disk, because the hosting tier's filesystem doesn't persist between deploys. The app survives every redeploy with zero data loss, at zero infrastructure cost.</p>
+    </div>
+    <div class="eng rv">
+      <span class="tag">Data integrity</span>
+      <h3>Self-healing bookkeeping</h3>
+      <p>Every paid order automatically logs its sale as income and its exact shipping cost as an expense. When this feature shipped after real orders already existed, an idempotent boot-time backfill repaired historical records safely — no manual data fixes, no double entries.</p>
+    </div>
+    <div class="eng rv">
+      <span class="tag">Async migration</span>
+      <h3>Sync to distributed SQLite</h3>
+      <p>The entire data layer was migrated from local synchronous SQLite to Turso's async distributed SQLite to go cloud-native — every query path rewritten, verified end to end, with zero frontend changes required.</p>
+    </div>
+    <div class="eng rv">
+      <span class="tag">Dynamic content</span>
+      <h3>Everything is editable</h3>
+      <p>Hero image, featured products, badges, coming-soon cards, brand story, photo stories, payment channels, contact links — all live-editable through the CMS with server-side sanitization on rich content. No developer required, ever.</p>
+    </div>
+    <div class="eng rv">
+      <span class="tag">Input hardening</span>
+      <h3>Defense at both ends</h3>
+      <p>Every money field and user input is validated client-side and server-side — a malformed shipping fee can't silently become free shipping, and rich text can't smuggle scripts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= UI SHOWCASE ================= -->
+<section style="background:var(--black-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <p class="eyebrow rv">06 — UI Showcase</p>
+    <h2 class="rv">Designed to feel like the brand</h2>
+    <p class="lede rv rv-d1" style="margin-bottom:56px;">Black. White. Royal blue. Big typography, editorial layouts, and interactions with intent.</p>
+
+    <div class="gallery">
+      <div class="full">
+        <div class="shot wide rv"><img src="Hero-section.jpg" alt="Wave3 homepage hero — Built on vision, designed for the future" loading="lazy" /></div>
+        <div class="shot-cap">Homepage hero</div>
+      </div>
+      <div>
+        <div class="shot square rv"><img src="Store-page.jpg" alt="Store page product catalog" loading="lazy" /></div>
+        <div class="shot-cap">Product catalog</div>
+      </div>
+      <div>
+        <div class="shot square rv rv-d1"><img src="Product-page.jpg" alt="Product page with size and stock selection" loading="lazy" /></div>
+        <div class="shot-cap">Size &amp; stock selection</div>
+      </div>
+      <div>
+        <div class="shot square rv"><img src="Multi-cart.jpg" alt="Multi-item shopping cart" loading="lazy" /></div>
+        <div class="shot-cap">Multi-item cart</div>
+      </div>
+      <div>
+        <div class="shot square rv rv-d1"><img src="Order-confirmation.jpg" alt="Checkout order confirmation" loading="lazy" /></div>
+        <div class="shot-cap">Order confirmation</div>
+      </div>
+      <div class="full">
+        <div class="shot wide rv"><img src="Movement-section.jpg" alt="Movement section — interactive expanding photo strip" loading="lazy" /></div>
+        <div class="shot-cap">Click-to-expand brand storytelling</div>
+      </div>
+      <div>
+        <div class="shot square rv"><img src="Our-story.jpg" alt="Brand story blog page, authored in the CMS" loading="lazy" /></div>
+        <div class="shot-cap">CMS-authored content</div>
+      </div>
+      <div>
+        <div class="shot square rv rv-d1"><img src="Community.jpg" alt="Community section with global member stats" loading="lazy" /></div>
+        <div class="shot-cap">Global community stats</div>
+      </div>
+    </div>
+
+    <h3 style="margin:64px 0 22px; font-size:24px;" class="rv">Mobile — fully responsive</h3>
+    <div class="mobile-row">
+      <div><div class="shot tall rv"><img src="Mobile-home.jpg" alt="Mobile homepage" loading="lazy" /></div></div>
+      <div><div class="shot tall rv rv-d1"><img src="Mobile-store.jpg" alt="Mobile store page" loading="lazy" /></div></div>
+      <div><div class="shot tall rv rv-d2"><img src="Mobile-cart.jpg" alt="Mobile cart and checkout" loading="lazy" /></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROCESS TIMELINE ================= -->
+<section>
+  <div class="wrap">
+    <div class="split">
+      <div class="sticky">
+        <p class="eyebrow rv">07 — Process</p>
+        <h2 class="rv">From research to launch</h2>
+        <p class="lede rv rv-d1">A structured, agency-grade process — run by one person.</p>
+      </div>
+      <div class="timeline" id="timeline">
+        <div class="progress" id="tl-progress"></div>
+        <div class="tl-step"><span class="dot"></span><h3>Research</h3><p>Brand positioning, PH customer payment behavior, marketplace UX patterns.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>Planning</h3><p>Feature scoping, data model design, zero-cost infrastructure strategy.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>UI Development</h3><p>Custom design system — typography, color, components, responsive layouts.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>Backend Development</h3><p>REST API, order lifecycle, inventory transactions, bookkeeping engine.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>CMS Development</h3><p>Dashboard, product/inventory/order management, rich content editing.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>Testing</h3><p>End-to-end flows, race-condition simulation, mobile audits, production smoke tests.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>Deployment</h3><p>Render hosting, Turso cloud database, environment configuration, CI on push.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>Documentation</h3><p>PDF operations manual and admin SOP, written for a non-technical operator.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>Training</h3><p>Loom video tutorials plus a live demo and hands-on training session.</p></div>
+        <div class="tl-step"><span class="dot"></span><h3>Launch</h3><p>Custom domain via GoDaddy DNS, SSL, go-live — and a sold-out first drop.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHALLENGES ================= -->
+<section style="background:var(--black-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <p class="eyebrow rv">08 — Challenges</p>
+    <h2 class="rv">The hard parts</h2>
+    <div class="cards c2" style="margin-top:48px;">
+      <div class="card rv"><span class="num">CMS</span><h3>Building a CMS from zero</h3><p>Designing an editing experience simple enough for a non-technical owner but powerful enough to run a real business — every affordance had to be invented, not installed.</p></div>
+      <div class="card rv rv-d1"><span class="num">DATA</span><h3>Database architecture</h3><p>Modeling orders, variants, reservations, media, and money movements so that every state change keeps stock and books consistent — including cancellations and reversals.</p></div>
+      <div class="card rv"><span class="num">SYNC</span><h3>Dynamic inventory</h3><p>Keeping what customers see truthful under concurrency: reservations, expiries, restocks, and admin edits all mutating the same counts safely.</p></div>
+      <div class="card rv rv-d1"><span class="num">STATE</span><h3>State management, no framework</h3><p>Cart, currency, order lifecycle and UI state handled in disciplined vanilla JavaScript — proving the fundamentals without hiding behind a framework.</p></div>
+      <div class="card rv"><span class="num">MOBILE</span><h3>Responsive everything</h3><p>Editorial desktop layouts that collapse into genuinely usable mobile experiences — including rethinking interactions (like the photo strip) rather than just shrinking them.</p></div>
+      <div class="card rv rv-d1"><span class="num">PROD</span><h3>Real production constraints</h3><p>Free-tier hosting with an ephemeral filesystem, cold starts, DNS migration from a locked registrar config, and testing against a live business that was actively selling.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DELIVERABLES ================= -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow rv">09 — Deliverables</p>
+    <h2 class="rv">What the client received</h2>
+    <div class="deliver rv" style="margin-top:48px;">
+      <div>Full-stack production website</div>
+      <div>Fully custom CMS</div>
+      <div>Cloud database (Turso)</div>
+      <div>Deployment &amp; hosting setup</div>
+      <div>Custom domain configuration</div>
+      <div>PDF operations manual</div>
+      <div>Loom video tutorials</div>
+      <div>Live demo session</div>
+      <div>Hands-on admin training</div>
+      <div>Ongoing technical support</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section style="background:var(--black-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <p class="eyebrow rv">10 — Results</p>
+    <h2 class="rv">Shipped. Live. Selling.</h2>
+    <div class="cards c3" style="margin-top:48px;">
+      <div class="card rv"><span class="num">V1</span><h3>First drop sold out</h3><p>The initial product batch sold out in the first production release — real customers, real payments, real fulfillment.</p></div>
+      <div class="card rv rv-d1"><span class="num">OPS</span><h3>Business runs itself</h3><p>The owner operates products, orders, content, and money reporting entirely through the CMS. No developer in the loop.</p></div>
+      <div class="card rv rv-d2"><span class="num">V2</span><h3>Platform, not project</h3><p>Version 2 shipped with a redesigned brand experience, richer CMS, and an architecture ready for payments, accounts, and automation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP ================= -->
+<section>
+  <div class="wrap">
+    <div class="split">
+      <div class="sticky">
+        <p class="eyebrow rv">11 — Roadmap</p>
+        <h2 class="rv">Architected for what's next</h2>
+        <p class="lede rv rv-d1">
+          The platform was designed so each of these drops in without a rewrite —
+          the API-first structure, clean data model, and CMS foundation are already in place.
+        </p>
+      </div>
+      <div class="chips rv" style="align-content:flex-start;">
+        <span class="chip">Payment gateway (PayMongo) — automated verification</span>
+        <span class="chip">Customer accounts</span>
+        <span class="chip">Email notifications &amp; receipts</span>
+        <span class="chip">Email marketing / Klaviyo integration</span>
+        <span class="chip">Discount codes</span>
+        <span class="chip">Loyalty &amp; rewards program</span>
+        <span class="chip">Analytics dashboard</span>
+        <span class="chip">AI automation</span>
+        <span class="chip">Third-party API integrations</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LESSONS ================= -->
+<section style="background:var(--black-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <p class="eyebrow rv">12 — Lessons Learned</p>
+    <h2 class="rv">What this project made me</h2>
+    <div class="cards c3" style="margin-top:48px;">
+      <div class="card rv"><h3>Systems thinking</h3><p>A feature is never just UI — it's data model, state transitions, failure modes, and the bookkeeping consequences of each. I learned to design the whole system before writing the first line.</p></div>
+      <div class="card rv rv-d1"><h3>Business first</h3><p>The most valuable decisions weren't technical. Launching with manual payment verification instead of waiting for a payment gateway put the business in market months earlier.</p></div>
+      <div class="card rv rv-d2"><h3>Production humility</h3><p>Deploying to real infrastructure with a live business taught me things tutorials never could: ephemeral disks, DNS propagation, cold starts, migration under load.</p></div>
+      <div class="card rv"><h3>Designing for non-engineers</h3><p>The CMS forced me to think like a UX designer: every workflow had to be obvious to someone who has never seen a database.</p></div>
+      <div class="card rv rv-d1"><h3>Communication is a feature</h3><p>Documentation, video walkthroughs, and training turned a codebase into a business tool the client actually trusts and uses daily.</p></div>
+      <div class="card rv rv-d2"><h3>Scalability as a habit</h3><p>Async data layer, API-first routes, additive migrations, idempotent repairs — building patterns that let the platform grow without rewrites.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<footer>
+  <div class="wrap cta">
+    <p class="eyebrow rv">Let's build yours</p>
+    <h2 class="rv">I build custom business platforms —<br />not just websites.</h2>
+    <p class="rv rv-d1">
+      Custom systems, custom CMS, operational software, and modern full-stack applications
+      built around how your business actually works.
+    </p>
+    <a class="btn rv rv-d2" href="https://www.linkedin.com/in/jhon-mycho-buerano" target="_blank" rel="noopener">Start a conversation →</a>
+    <p style="margin-top:60px; font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted-2);">
+      Wave3 Collective PH — Case Study · Built from scratch · Live at wave3collectiveph.com
+    </p>
+  </div>
+</footer>
+
+<script>
+  // reveal on scroll (with a hard fallback: never leave content hidden)
+  try {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.rv').forEach((el) => io.observe(el));
+  } catch (err) {
+    document.querySelectorAll('.rv').forEach((el) => el.classList.add('in'));
+  }
+
+  // timeline progress line + step lighting
+  const tl = document.getElementById('timeline');
+  const bar = document.getElementById('tl-progress');
+  const steps = [...document.querySelectorAll('.tl-step')];
+  function tick() {
+    if (!tl) return;
+    const r = tl.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const total = r.height;
+    const passed = Math.min(Math.max(vh * 0.72 - r.top, 0), total);
+    bar.style.height = passed + 'px';
+    for (const s of steps) {
+      const sr = s.getBoundingClientRect();
+      s.classList.toggle('lit', sr.top - r.top < passed);
+    }
+  }
+  document.addEventListener('scroll', tick, { passive: true });
+  window.addEventListener('resize', tick);
+  tick();
+</script>
+</body>
+</html>
